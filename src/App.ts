@@ -1,4 +1,7 @@
 import express, { Request, Response } from "express";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app: express.Express = express();
 const port = process.env.PORT || 3000;
@@ -8,7 +11,7 @@ app.get("/", (req: Request, res: Response) => {
     <html>
     <head>
   
-    <h1>Task 1</h1>
+    <h1>Task 123</h1>
     <p>Server is running on http://localhost:${port}</p>
     <h2>Request method ${req.method}</h2>
     <p>Request URL ${req.url}</p>

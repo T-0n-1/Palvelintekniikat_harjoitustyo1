@@ -1,3 +1,12 @@
+try {
+  require("dotenv").config();
+  console.log("Loaded environment variables from .env file");
+} catch (error) {
+  console.log(
+    "dotenv not installed or .env file not found; skipping .env configuration",
+  );
+}
+
 const serverPort = process.env.PORT || 3000;
 
 module.exports = {
