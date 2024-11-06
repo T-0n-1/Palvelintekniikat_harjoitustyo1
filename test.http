@@ -2,3 +2,5 @@
 GET http://localhost:{{$dotenv BROWSERSYNCPORT}}
 
 ###
+
+GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/students
