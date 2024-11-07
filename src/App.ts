@@ -8,6 +8,29 @@ const port: number = Number(process.env.PORT) || 3000;
 
 app.use(express.static("public"));
 
+const students = [
+  {
+    id: 1,
+    firstName: "John",
+    lastName: "Doe",
+    credits: 150,
+  },
+  {
+    id: 2,
+    firstName: "Jane",
+    lastName: "Doe",
+    credits: 245,
+  },
+  {
+    id: 3,
+    firstName: "Tom",
+    lastName: "Smith",
+    credits: 235,
+  },
+];
+
+// Routes
+// Home route
 app.get("/", (req: Request, res: Response) => {
   res.send(`
     <html>
@@ -20,9 +43,8 @@ app.get("/", (req: Request, res: Response) => {
     
     <body>
     <h1>${greeting()}</h1>
-    <p>Server is running on http://localhost:${port}</p>
-    <h2>Request method ${req.method}</h2>
-    <p>Request URL ${req.url}</p>
+    <h2>Server is running on http://localhost:${port}</h2>
+    <p>Request method ${req.method}</p>
     <p>Request path ${req.path}</p>
     <p>Request hostname ${req.hostname}</p>
     </body>
@@ -30,25 +52,29 @@ app.get("/", (req: Request, res: Response) => {
     `);
 });
 
+// API route to get all students
 app.get("/api/students", (req: Request, res: Response) => {
-  res.json([
-    {
-      id: 1,
-      name: "John Doe",
-      age: 20,
-    },
-    {
-      id: 2,
-      name: "Jane Doe",
-      age: 22,
-    },
-  ]);
+  res.json(students);
 });
 
+// API route to get a student by id
+app.get("/api/students/:id", (req: Request, res: Response) => {
+  const student = students.find(
+    (student) => student.id === Number(req.params.id),
+  );
+  if (student) {
+    res.json(student);
+  } else {
+    res.status(404).json({ id: -1, firstName: "", lastName: "", credits: 0 });
+  }
+});
+
+// Start server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
 });
 
+// Greeting function
 function greeting(): string {
   const now = new Date();
   const hour = now.getHours();
