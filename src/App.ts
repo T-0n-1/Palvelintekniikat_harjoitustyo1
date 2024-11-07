@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import Joi from "joi";
-import { Student, Students, studentData } from "./Student";
+import studentsRouter from "./routes/studentsAPI";
 
 dotenv.config();
 
@@ -11,16 +11,9 @@ const port: number = Number(process.env.PORT) || 3000;
 app.use(express.json());
 app.use(express.static("public"));
 
-const studentsMap: Map<number, Student> = new Map(
-  studentData.map((data) => [
-    data.id,
-    new Student(data.id, data.firstName, data.lastName, data.credits),
-  ]),
-);
+// Students API route
+app.use("/api/students", studentsRouter);
 
-const studentsObject: Students = new Students(studentsMap);
-
-// Routes
 // Home route
 app.get("/", (req: Request, res: Response) => {
   const querySchema = Joi.object().unknown(false);
@@ -48,61 +41,6 @@ app.get("/", (req: Request, res: Response) => {
       `);
   }
 });
-
-// API route to get all students
-app.get("/api/students", (req: Request, res: Response) => {
-  const querySchema = Joi.object().unknown(false);
-  const { error } = querySchema.validate(req.query);
-  if (error) {
-    res.status(400).json({ error: error.details[0].message });
-  } else {
-    const arrayOfStudents = Array.from(studentsMap.values());
-    res.json(arrayOfStudents);
-  }
-});
-
-// API route to get a student by id
-app.get("/api/students/:id", (req: Request, res: Response) => {
-  const schema = Joi.object({
-    id: Joi.number().integer().min(1).max(9999),
-  }).unknown(false);
-  const { error } = schema.validate(req.params);
-  if (error) {
-    res.status(400).json({ error: error.details[0].message });
-  } else {
-    const student = studentsObject.get(Number(req.params.id));
-    if (student) {
-      res.json(student);
-    } else {
-      res.status(404).json({ id: -1, firstName: "", lastName: "", credits: 0 });
-    }
-  }
-});
-
-// API route to add a student
-app.post(
-  "/api/students/:firstName/:lastName/:credits",
-  (req: Request, res: Response) => {
-    const schema = Joi.object({
-      firstName: Joi.string().min(2).max(15).required(),
-      lastName: Joi.string().min(2).max(20).required(),
-      credits: Joi.number().integer().min(0).max(300).required(),
-    }).unknown(false);
-    const { error, value } = schema.validate(req.body);
-    if (error) {
-      res.status(400).json({ error: error.details[0].message });
-    } else {
-      const student = {
-        id: studentData.length + 1,
-        firstName: value.firstName,
-        lastName: value.lastName,
-        credits: value.credits,
-      };
-      studentData.push(student);
-      res.json(student);
-    }
-  },
-);
 
 // Start server
 app.listen(port, () => {

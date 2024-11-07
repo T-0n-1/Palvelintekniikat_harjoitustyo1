@@ -100,3 +100,12 @@ export const studentData = [
     credits: 235,
   },
 ];
+
+export const studentsMap: Map<number, Student> = new Map(
+  studentData.map((data) => [
+    data.id,
+    new Student(data.id, data.firstName, data.lastName, data.credits),
+  ]),
+);
+
+export const studentsObject: Students = new Students(studentsMap);
