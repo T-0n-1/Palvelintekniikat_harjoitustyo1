@@ -69,6 +69,21 @@ app.get("/api/students/:id", (req: Request, res: Response) => {
   }
 });
 
+// API route to add a student
+app.post(
+  "/api/students/:firstName/:lastName/:credits",
+  (req: Request, res: Response) => {
+    const student = {
+      id: students.length + 1,
+      firstName: req.params.firstName,
+      lastName: req.params.lastName,
+      credits: Number(req.params.credits) || 0,
+    };
+    students.push(student);
+    res.json(student);
+  },
+);
+
 // Start server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

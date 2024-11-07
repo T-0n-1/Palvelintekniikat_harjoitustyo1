@@ -8,3 +8,11 @@ GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/students
 ###
 
 GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/students/1
+
+###
+
+GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/students/5
+
+###
+
+POST http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/students/{firstName= "John", lastName= "Wick"} application/json
