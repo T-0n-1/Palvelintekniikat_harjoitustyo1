@@ -1,11 +1,13 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
+import Joi from "joi";
 
 dotenv.config();
 
 const app: express.Express = express();
 const port: number = Number(process.env.PORT) || 3000;
 
+app.use(express.json());
 app.use(express.static("public"));
 
 const students = [
@@ -54,18 +56,32 @@ app.get("/", (req: Request, res: Response) => {
 
 // API route to get all students
 app.get("/api/students", (req: Request, res: Response) => {
-  res.json(students);
+  const querySchema = Joi.object().unknown(false);
+  const { error } = querySchema.validate(req.query);
+  if (error) {
+    res.status(400).json({ error: error.details[0].message });
+  } else {
+    res.json(students);
+  }
 });
 
 // API route to get a student by id
 app.get("/api/students/:id", (req: Request, res: Response) => {
-  const student = students.find(
-    (student) => student.id === Number(req.params.id),
-  );
-  if (student) {
-    res.json(student);
+  const schema = Joi.object({
+    id: Joi.number().integer().min(1).max(9999),
+  }).unknown(false);
+  const { error } = schema.validate(req.params);
+  if (error) {
+    res.status(400).json({ error: error.details[0].message });
   } else {
-    res.status(404).json({ id: -1, firstName: "", lastName: "", credits: 0 });
+    const student = students.find(
+      (student) => student.id === Number(req.params.id),
+    );
+    if (student) {
+      res.json(student);
+    } else {
+      res.status(404).json({ id: -1, firstName: "", lastName: "", credits: 0 });
+    }
   }
 });
 
@@ -73,14 +89,24 @@ app.get("/api/students/:id", (req: Request, res: Response) => {
 app.post(
   "/api/students/:firstName/:lastName/:credits",
   (req: Request, res: Response) => {
-    const student = {
-      id: students.length + 1,
-      firstName: req.params.firstName,
-      lastName: req.params.lastName,
-      credits: Number(req.params.credits) || 0,
-    };
-    students.push(student);
-    res.json(student);
+    const schema = Joi.object({
+      firstName: Joi.string().min(2).max(15).required(),
+      lastName: Joi.string().min(2).max(20).required(),
+      credits: Joi.number().integer().min(0).max(300).required(),
+    }).unknown(false);
+    const { error, value } = schema.validate(req.body);
+    if (error) {
+      res.status(400).json({ error: error.details[0].message });
+    } else {
+      const student = {
+        id: students.length + 1,
+        firstName: value.firstName,
+        lastName: value.lastName,
+        credits: value.credits,
+      };
+      students.push(student);
+      res.json(student);
+    }
   },
 );
 
