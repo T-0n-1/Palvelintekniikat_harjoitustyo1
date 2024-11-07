@@ -62,4 +62,41 @@ export class Students {
   public put(student: Student): Student | undefined {
     return this.add(student);
   }
+
+  // Used for DELETE protocol
+  public remove(id: number): Student | undefined {
+    const student: Student | undefined = this.students.get(id);
+    this.students.delete(id);
+    return student;
+  }
+
+  // Used for GET protocol
+  public get(id: number): Student | undefined {
+    return this.students.get(id);
+  }
+
+  public getAll(): Map<number, Student> {
+    return this.students;
+  }
 }
+
+export const studentData = [
+  {
+    id: 1,
+    firstName: "John",
+    lastName: "Doe",
+    credits: 150,
+  },
+  {
+    id: 2,
+    firstName: "Jane",
+    lastName: "Doe",
+    credits: 245,
+  },
+  {
+    id: 3,
+    firstName: "Tom",
+    lastName: "Smith",
+    credits: 235,
+  },
+];

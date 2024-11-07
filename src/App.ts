@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import Joi from "joi";
+import { Student, Students, studentData } from "./Student";
 
 dotenv.config();
 
@@ -10,48 +11,42 @@ const port: number = Number(process.env.PORT) || 3000;
 app.use(express.json());
 app.use(express.static("public"));
 
-const students = [
-  {
-    id: 1,
-    firstName: "John",
-    lastName: "Doe",
-    credits: 150,
-  },
-  {
-    id: 2,
-    firstName: "Jane",
-    lastName: "Doe",
-    credits: 245,
-  },
-  {
-    id: 3,
-    firstName: "Tom",
-    lastName: "Smith",
-    credits: 235,
-  },
-];
+const studentsMap: Map<number, Student> = new Map(
+  studentData.map((data) => [
+    data.id,
+    new Student(data.id, data.firstName, data.lastName, data.credits),
+  ]),
+);
+
+const studentsObject: Students = new Students(studentsMap);
 
 // Routes
 // Home route
 app.get("/", (req: Request, res: Response) => {
-  res.send(`
-    <html>
-    <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Node.js Express TypeScript</title>
-    <link rel="stylesheet" href="css/styles.css">
-    </head>
-    
-    <body>
-    <h1>${greeting()}</h1>
-    <h2>Server is running on http://localhost:${port}</h2>
-    <p>Request method ${req.method}</p>
-    <p>Request path ${req.path}</p>
-    <p>Request hostname ${req.hostname}</p>
-    </body>
-    </html>
-    `);
+  const querySchema = Joi.object().unknown(false);
+  const { error } = querySchema.validate(req.query);
+  if (error) {
+    res.status(400).json({ error: error.details[0].message });
+  } else {
+    res.send(`
+      <html>
+      <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Node.js Express TypeScript</title>
+      <link rel="stylesheet" href="css/styles.css">
+      </head>
+      
+      <body>
+      <h1>${greeting()}</h1>
+      <h2>Server is running on http://localhost:${port}</h2>
+      <p>Request method ${req.method}</p>
+      <p>Request path ${req.path}</p>
+      <p>Request hostname ${req.hostname}</p>
+      </body>
+      </html>
+      `);
+  }
 });
 
 // API route to get all students
@@ -61,7 +56,8 @@ app.get("/api/students", (req: Request, res: Response) => {
   if (error) {
     res.status(400).json({ error: error.details[0].message });
   } else {
-    res.json(students);
+    const arrayOfStudents = Array.from(studentsMap.values());
+    res.json(arrayOfStudents);
   }
 });
 
@@ -74,9 +70,7 @@ app.get("/api/students/:id", (req: Request, res: Response) => {
   if (error) {
     res.status(400).json({ error: error.details[0].message });
   } else {
-    const student = students.find(
-      (student) => student.id === Number(req.params.id),
-    );
+    const student = studentsObject.get(Number(req.params.id));
     if (student) {
       res.json(student);
     } else {
@@ -99,12 +93,12 @@ app.post(
       res.status(400).json({ error: error.details[0].message });
     } else {
       const student = {
-        id: students.length + 1,
+        id: studentData.length + 1,
         firstName: value.firstName,
         lastName: value.lastName,
         credits: value.credits,
       };
-      students.push(student);
+      studentData.push(student);
       res.json(student);
     }
   },
