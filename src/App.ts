@@ -17,7 +17,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 
 // Students API route
-app.use("/api/students", studentsRouter);
+app.use("/api", studentsRouter);
 
 // Home route
 app.get("/", (req: Request, res: Response) => {

@@ -7,7 +7,7 @@ const router: express.Router = express.Router();
 dotenv.config();
 
 // API route to get all students
-router.get("/", (req: Request, res: Response) => {
+router.get("/students", (req: Request, res: Response) => {
   const querySchema = Joi.object().unknown(false);
   const { error } = querySchema.validate(req.query);
   if (error) {
@@ -19,7 +19,7 @@ router.get("/", (req: Request, res: Response) => {
 });
 
 // API route to get a student by id
-router.get("/:id", (req: Request, res: Response) => {
+router.get("/students/:id", (req: Request, res: Response) => {
   const schema = Joi.object({
     id: Joi.number().integer().min(1).max(9999),
   }).unknown(false);
@@ -37,7 +37,7 @@ router.get("/:id", (req: Request, res: Response) => {
 });
 
 // API route to add a student
-router.post("/:firstName/:lastName/:credits", (req: Request, res: Response) => {
+router.post("/newstudent", (req: Request, res: Response) => {
   const schema = Joi.object({
     firstName: Joi.string().min(2).max(15).required(),
     lastName: Joi.string().min(2).max(20).required(),

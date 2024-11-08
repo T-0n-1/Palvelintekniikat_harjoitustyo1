@@ -16,3 +16,14 @@ GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/students/5
 ###
 
 GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/students/a
+
+###
+
+POST http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/newstudent
+Content-Type: application/json
+
+{
+    "firstName": "John",
+    "lastName": "Wick",
+    "credits": 25
+}
