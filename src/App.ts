@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import Joi from "joi";
 import studentsRouter from "./routes/studentsAPI";
+import path from "path";
 
 dotenv.config();
 
@@ -10,6 +11,9 @@ const port: number = Number(process.env.PORT) || 3000;
 
 app.use(express.json());
 app.use(express.static("public"));
+app.set("view engine", "ejs");
+
+app.set("views", path.join(__dirname, "views"));
 
 // Students API route
 app.use("/api/students", studentsRouter);
@@ -21,24 +25,13 @@ app.get("/", (req: Request, res: Response) => {
   if (error) {
     res.status(400).json({ error: error.details[0].message });
   } else {
-    res.send(`
-      <html>
-      <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Node.js Express TypeScript</title>
-      <link rel="stylesheet" href="css/styles.css">
-      </head>
-      
-      <body>
-      <h1>${greeting()}</h1>
-      <h2>Server is running on http://localhost:${port}</h2>
-      <p>Request method ${req.method}</p>
-      <p>Request path ${req.path}</p>
-      <p>Request hostname ${req.hostname}</p>
-      </body>
-      </html>
-      `);
+    res.render("index", {
+      greeting: greeting(),
+      method: req.method,
+      path: req.path,
+      hostname: req.hostname,
+      port: getPort(),
+    });
   }
 });
 
@@ -64,6 +57,14 @@ function greeting(): string {
   if (hour >= 18 && hour < 24) {
     return "Good evening";
   }
-
   return "Hello";
+}
+
+// Function for defining port depending on environment
+function getPort(): number {
+  if (app.get("env") === "development") {
+    return Number(process.env.BROWSERSYNCPORT);
+  } else {
+    return Number(process.env.PORT);
+  }
 }
