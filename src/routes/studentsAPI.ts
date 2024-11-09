@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import Joi from "joi";
-import { studentData, studentsMap, studentsObject } from "../Student";
+import { Student, studentData, studentsObject } from "../Student";
 
 const router: express.Router = express.Router();
 dotenv.config();
@@ -13,6 +13,7 @@ router.get("/students", (req: Request, res: Response) => {
   if (error) {
     res.status(400).json({ error: error.details[0].message });
   } else {
+    const studentsMap = studentsObject.students;
     const arrayOfStudents = Array.from(studentsMap.values());
     res.json(arrayOfStudents);
   }
@@ -36,7 +37,7 @@ router.get("/students/:id", (req: Request, res: Response) => {
   }
 });
 
-// API route to add a student
+// API route to POST a new student
 router.post("/newstudent", (req: Request, res: Response) => {
   const schema = Joi.object({
     firstName: Joi.string().min(2).max(15).required(),
@@ -47,15 +48,39 @@ router.post("/newstudent", (req: Request, res: Response) => {
   if (error) {
     res.status(400).json({ error: error.details[0].message });
   } else {
-    const student = {
-      id: studentData.length + 1,
-      firstName: value.firstName,
-      lastName: value.lastName,
-      credits: value.credits,
-    };
-    studentData.push(student);
+    const student: Student = new Student(
+      studentData.length + 1,
+      value.firstName,
+      value.lastName,
+      value.credits,
+    );
+    studentsObject.add(student);
     res.json(student);
   }
 });
+
+// API route to PUT a new student
+// router.post("/updatestudent", (req: Request, res: Response) => {
+//   const schema = Joi.object({
+//     id: Joi.number().integer().min(1).max(9999).required(),
+//     firstName: Joi.string().min(2).max(15).required(),
+//     lastName: Joi.string().min(2).max(20).required(),
+//     credits: Joi.number().integer().min(0).max(300).required(),
+//   }).unknown(false);
+//   const { error, value } = schema.validate(req.body);
+//   if (error) {
+//     res.status(400).json({ error: error.details[0].message });
+//   } else {
+//     const student = studentsObject.get(value.id);
+//     if (student) {
+//       oldStudent = { ...student };
+//     }
+//     student.firstName = value.firstName;
+//     student.lastName = value.lastName;
+//     student.credits = value.credits;
+//     if (oldStudent) {
+//       res.json(previous: oldStudent);
+//     }
+//     res.json(student);
 
 export default router;

@@ -25,5 +25,5 @@ Content-Type: application/json
 {
     "firstName": "John",
     "lastName": "Wick",
-    "credits": 25
+    "credits": 100
 }
