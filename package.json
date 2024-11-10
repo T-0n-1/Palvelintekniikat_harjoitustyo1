@@ -6,8 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./dist/App.js",
-    "dev": "concurrently \"nodemon\" \"browser-sync start --config bs-config.js\"",
-    "predev": "tsc -w &"
+    "dev": "concurrently \"nodemon --config nodemon-ejs.json\" \"nodemon --config nodemon-app.json\" \"browser-sync start --config bs-config.js\"",
+    "predev": "tsc -w & "
   },
   "author": "Toni Mertanen",
   "license": "ISC",

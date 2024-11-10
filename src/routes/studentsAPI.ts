@@ -13,7 +13,7 @@ router.get("/students", (req: Request, res: Response) => {
   if (error) {
     res.status(400).json({ error: error.details[0].message });
   } else {
-    const studentsMap = studentsObject.students;
+    const studentsMap = studentsObject.getAll();
     const arrayOfStudents = Array.from(studentsMap.values());
     res.json(arrayOfStudents);
   }
