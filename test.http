@@ -39,3 +39,7 @@ Content-Type: application/json
     "lastName": "Vekara",
     "credits": 240
 }
+
+###
+
+DELETE http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/deletestudent/3

@@ -86,4 +86,23 @@ router.put("/modifystudent", (req: Request, res: Response) => {
   }
 });
 
+// API route to DELETE a new student
+router.delete("/deletestudent/:id", (req: Request, res: Response) => {
+  const schema = Joi.object({
+    id: Joi.number().integer().min(1).max(9999),
+  }).unknown(false);
+  const { value, error } = schema.validate(req.params);
+  if (error) {
+    res.status(400).json({ error: error.details[0].message });
+  } else {
+    if (!studentsObject.get(value.id)) {
+      res.status(404).json({ id: -1, firstName: "", lastName: "", credits: 0 });
+    } else {
+      const student: Student = studentsObject.get(value.id)!;
+      res.json(student);
+      studentsObject.remove(student.id);
+    }
+  }
+});
+
 export default router;
