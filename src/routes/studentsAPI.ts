@@ -63,9 +63,9 @@ router.post("/newstudent", (req: Request, res: Response) => {
 router.put("/modifystudent", (req: Request, res: Response) => {
   const schema = Joi.object({
     id: Joi.number().integer().min(1).max(9999).required(),
-    firstName: Joi.string().min(2).max(15).required(),
-    lastName: Joi.string().min(2).max(20).required(),
-    credits: Joi.number().integer().min(0).max(300).required(),
+    firstName: Joi.string().min(2).max(15),
+    lastName: Joi.string().min(2).max(20),
+    credits: Joi.number().integer().min(0).max(300),
   }).unknown(false);
   const { error, value } = schema.validate(req.body);
   if (error) {
@@ -74,12 +74,8 @@ router.put("/modifystudent", (req: Request, res: Response) => {
     if (!studentsObject.get(value.id)) {
       res.status(404).json({ id: -1, firstName: "", lastName: "", credits: 0 });
     } else {
-      const student: Student = new Student(
-        value.id,
-        value.firstName,
-        value.lastName,
-        value.credits,
-      );
+      const student: Student = studentsObject.get(value.id)!;
+      Object.assign(student, value);
       studentsObject.put(student);
       res.json(student);
     }

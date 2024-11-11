@@ -36,7 +36,16 @@ Content-Type: application/json
 {
     "id": 1,
     "firstName": "Eka",
-    "lastName": "Vekara",
+    "lastName": "Vekara"
+}
+
+###
+
+PUT http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/modifystudent
+Content-Type: application/json
+
+{
+    "id": 4,
     "credits": 240
 }
 
