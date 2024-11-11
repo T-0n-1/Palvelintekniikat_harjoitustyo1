@@ -60,27 +60,30 @@ router.post("/newstudent", (req: Request, res: Response) => {
 });
 
 // API route to PUT a new student
-// router.post("/updatestudent", (req: Request, res: Response) => {
-//   const schema = Joi.object({
-//     id: Joi.number().integer().min(1).max(9999).required(),
-//     firstName: Joi.string().min(2).max(15).required(),
-//     lastName: Joi.string().min(2).max(20).required(),
-//     credits: Joi.number().integer().min(0).max(300).required(),
-//   }).unknown(false);
-//   const { error, value } = schema.validate(req.body);
-//   if (error) {
-//     res.status(400).json({ error: error.details[0].message });
-//   } else {
-//     const student = studentsObject.get(value.id);
-//     if (student) {
-//       oldStudent = { ...student };
-//     }
-//     student.firstName = value.firstName;
-//     student.lastName = value.lastName;
-//     student.credits = value.credits;
-//     if (oldStudent) {
-//       res.json(previous: oldStudent);
-//     }
-//     res.json(student);
+router.put("/modifystudent", (req: Request, res: Response) => {
+  const schema = Joi.object({
+    id: Joi.number().integer().min(1).max(9999).required(),
+    firstName: Joi.string().min(2).max(15).required(),
+    lastName: Joi.string().min(2).max(20).required(),
+    credits: Joi.number().integer().min(0).max(300).required(),
+  }).unknown(false);
+  const { error, value } = schema.validate(req.body);
+  if (error) {
+    res.status(400).json({ error: error.details[0].message });
+  } else {
+    if (!studentsObject.get(value.id)) {
+      res.status(404).json({ id: -1, firstName: "", lastName: "", credits: 0 });
+    } else {
+      const student: Student = new Student(
+        value.id,
+        value.firstName,
+        value.lastName,
+        value.credits,
+      );
+      studentsObject.put(student);
+      res.json(student);
+    }
+  }
+});
 
 export default router;
