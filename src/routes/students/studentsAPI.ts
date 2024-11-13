@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import Joi from "joi";
-import { Student, studentData, studentsObject } from "../Student";
+import { Student, studentData, studentsObject } from "../../Student";
 
 const router: express.Router = express.Router();
 dotenv.config();

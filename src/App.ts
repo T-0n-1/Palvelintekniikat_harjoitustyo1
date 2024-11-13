@@ -1,5 +1,5 @@
 import express, { Request, Response } from "express";
-import studentsRouter from "./routes/studentsAPI";
+import studentsRouter from "./routes/students/studentsAPI";
 import { greeting, getPort } from "./functions";
 import dotenv from "dotenv";
 import Joi from "joi";
@@ -39,5 +39,5 @@ app.get("/", (req: Request, res: Response) => {
 
 // Start server
 app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
+  console.log(`Server for App1 is running on http://localhost:${port}`);
 });
