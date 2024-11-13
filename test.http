@@ -52,3 +52,11 @@ Content-Type: application/json
 ###
 
 DELETE http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/deletestudent/3
+
+###
+
+GET http://localhost:{{$dotenv SERVERPORT}}/api/fruit/1
+
+###
+
+GET http://localhost:{{$dotenv SERVERPORT}}/api/fruits

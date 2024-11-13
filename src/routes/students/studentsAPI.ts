@@ -101,4 +101,23 @@ router.delete("/deletestudent/:id", (req: Request, res: Response) => {
   }
 });
 
+//Route for fetching all fruits from App2
+router.get("/fruits", (req: Request, res: Response) => {
+  const querySchema = Joi.object().unknown(false);
+  const { error } = querySchema.validate(req.query);
+  if (error) {
+    res.status(400).json({ error: error.details[0].message });
+  } else {
+    fetch(
+      `http://${process.env.SERVERNAME}:${process.env.SERVERPORT}/api/fruits`,
+    )
+      .then((rawReturn) => rawReturn.json())
+      .then((jsonObject) => {
+        console.log(jsonObject);
+        return jsonObject;
+      })
+      .then((jsonObject) => res.json(jsonObject));
+  }
+});
+
 export default router;
