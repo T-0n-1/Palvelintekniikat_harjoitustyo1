@@ -119,7 +119,7 @@ router.get("/fruits", (req: Request, res: Response) => {
       })
       .then((jsonObject) => res.json(jsonObject))
       .catch((error) => {
-        console.error("Error fetching data:", error);
+        console.error("Error fetching data: " + error);
         res.status(500).json({ error: "Failed to fetch data" });
       });
   }
