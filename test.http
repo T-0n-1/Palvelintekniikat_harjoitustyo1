@@ -1,4 +1,5 @@
 ### App1: Basic get request
+
 GET http://localhost:{{$dotenv BROWSERSYNCPORT}}
 
 ### App1: get all students

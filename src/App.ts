@@ -9,6 +9,7 @@ dotenv.config();
 
 const app: express.Express = express();
 const port: number = Number(process.env.PORT) || 3000;
+const title: string = "Node.js Express TypeScript";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -28,7 +29,8 @@ app.get("/", (req: Request, res: Response) => {
     res.status(400).json({ error: error.details[0].message });
   } else {
     res.render("index", {
-      greeting: greeting(),
+      title: title,
+      greeting: `${greeting()} - this is the main app's landing page`,
       method: req.method,
       path: req.path,
       hostname: req.hostname,
