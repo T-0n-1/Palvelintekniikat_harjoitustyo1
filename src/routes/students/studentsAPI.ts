@@ -2,6 +2,7 @@ import express, { Request, Response } from "express";
 import dotenv from "dotenv";
 import Joi from "joi";
 import { Student, studentData, studentsObject } from "../../Student";
+import axios from "axios";
 
 const router: express.Router = express.Router();
 dotenv.config();
@@ -108,15 +109,19 @@ router.get("/fruits", (req: Request, res: Response) => {
   if (error) {
     res.status(400).json({ error: error.details[0].message });
   } else {
-    fetch(
-      `http://${process.env.SERVERNAME}:${process.env.SERVERPORT}/api/fruits`,
-    )
-      .then((rawReturn) => rawReturn.json())
-      .then((jsonObject) => {
-        console.log(jsonObject);
-        return jsonObject;
+    axios
+      .get(
+        `http://${process.env.SERVERNAME}:${process.env.SERVERPORT}/api/fruits`,
+      )
+      .then((response) => {
+        console.log(response.data);
+        return response.data;
       })
-      .then((jsonObject) => res.json(jsonObject));
+      .then((jsonObject) => res.json(jsonObject))
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        res.status(500).json({ error: "Failed to fetch data" });
+      });
   }
 });
 
