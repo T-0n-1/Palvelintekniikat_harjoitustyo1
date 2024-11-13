@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import Joi from "joi";
 import fruitsRouter from "./routes/fruits/fruitsAPI";
 import path from "path";
+import cors from "cors";
+import { getPort } from "./functions";
 
 const app: Express = express();
 const port: number = Number(process.env.SERVERPORT) || 3001;
@@ -10,6 +12,11 @@ const greeting: string = "Fruit API main";
 const title: string = "Fruit API";
 dotenv.config();
 
+app.use(
+  cors({
+    origin: `http://${process.env.SERVERNAME}:${getPort()}`,
+  }),
+);
 app.use("/api", fruitsRouter);
 app.use(express.static("public"));
 app.set("view engine", "ejs");
