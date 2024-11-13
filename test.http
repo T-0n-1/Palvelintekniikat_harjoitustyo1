@@ -9,6 +9,10 @@ GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/students
 
 GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/fruits
 
+### App1: get one fruit from App2 using fetch
+
+GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/fruit/1
+
 ### App1: get one student (id: 1)
 
 GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/students/1

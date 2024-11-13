@@ -125,4 +125,28 @@ router.get("/fruits", (req: Request, res: Response) => {
   }
 });
 
+router.get("/fruit/:id", (req: Request, res: Response) => {
+  const querySchema = Joi.object({
+    id: Joi.number().required().min(1).max(9999),
+  }).unknown(false);
+  const { value, error } = querySchema.validate(req.params);
+  if (error) {
+    res.status(400).json({ error: error.details[0].message });
+  } else {
+    axios
+      .get(
+        `http://${process.env.SERVERNAME}:${process.env.SERVERPORT}/api/fruit/${Number(value.id)}`,
+      )
+      .then((response) => {
+        console.log(response.data);
+        return response.data;
+      })
+      .then((jsonObject) => res.json(jsonObject))
+      .catch((error) => {
+        console.error("Error fetching data: " + error);
+        res.status(500).json({ error: "Failed to fetch data" });
+      });
+  }
+});
+
 export default router;
