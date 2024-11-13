@@ -1,23 +1,27 @@
-
+### App1: Basic get request
 GET http://localhost:{{$dotenv BROWSERSYNCPORT}}
 
-###
+### App1: get all students
 
 GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/students
 
-###
+### App1: get all fruits from App2 using fetch
+
+GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/fruits
+
+### App1: get one student (id: 1)
 
 GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/students/1
 
-###
+### App1: try to get nonexits student (id: 5)
 
 GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/students/5
 
-###
+### App1 try to get student with invalid id (id: a)
 
 GET http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/students/a
 
-###
+### App1: add new student
 
 POST http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/newstudent
 Content-Type: application/json
@@ -28,7 +32,7 @@ Content-Type: application/json
     "credits": 100
 }
 
-###
+### App1: modify students information (id: 1)
 
 PUT http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/modifystudent
 Content-Type: application/json
@@ -39,7 +43,7 @@ Content-Type: application/json
     "lastName": "Vekara"
 }
 
-###
+### App1: modify students information (id: 4)
 
 PUT http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/modifystudent
 Content-Type: application/json
@@ -49,14 +53,14 @@ Content-Type: application/json
     "credits": 240
 }
 
-###
+### App1: delete student (id: 3)
 
 DELETE http://localhost:{{$dotenv BROWSERSYNCPORT}}/api/deletestudent/3
 
-###
+### App2: get one fruit (id: 1)
 
 GET http://localhost:{{$dotenv SERVERPORT}}/api/fruit/1
 
-###
+### App2: get all fruits
 
 GET http://localhost:{{$dotenv SERVERPORT}}/api/fruits
