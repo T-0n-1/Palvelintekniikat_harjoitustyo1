@@ -34,7 +34,7 @@ app.get("/", (req: Request, res: Response) => {
       method: req.method,
       path: req.path,
       hostname: req.hostname,
-      port: getPort(),
+      port: `${port} - BrowserSync using port ${getPort()} for dev purposess`,
     });
   }
 });
