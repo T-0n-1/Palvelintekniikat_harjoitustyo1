@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import studentsRouter from "./routes/students/studentsAPI";
-import { greeting, getPort } from "./functions";
+import { greeting, getPort, isOriginAllowed, setHeaders } from "./functions";
 import dotenv from "dotenv";
 import Joi from "joi";
 import path from "path";
@@ -20,6 +20,15 @@ app.set("views", path.join(__dirname, "views"));
 
 // Students API route
 app.use("/api", studentsRouter);
+
+// CORS middleware
+app.use((req: Request, res: Response, next) => {
+  const origin: string = req.headers.origin || "";
+  if (isOriginAllowed(origin)) {
+    setHeaders(res, origin);
+  }
+  next();
+});
 
 // Home route
 app.get("/", (req: Request, res: Response) => {

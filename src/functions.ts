@@ -1,6 +1,18 @@
 import express from "express";
+import dotenv from "dotenv";
 
 const app: express.Express = express();
+
+dotenv.config();
+
+// List of whitelisted origins
+const whitelist: string[] = [
+  `https://${process.env.SERVERNAME}:${process.env.PORT}`,
+  `https://${process.env.SERVERNAME}:${process.env.BROWSERSYNCPORT}`,
+  `https://${process.env.SERVERNAME}:${process.env.SERVERPORT}`,
+  "https://tonimertanen.fi",
+  "https://www.google.com:3000",
+];
 
 // Greeting function
 function greeting(): string {
@@ -31,4 +43,14 @@ function getPort(): number {
   }
 }
 
-export { greeting, getPort };
+// Function for checking if the request is from a whitelisted origin
+function isOriginAllowed(origin: string): boolean {
+  return whitelist.indexOf(origin) !== -1;
+}
+
+// Function for setting headers for CORS
+function setHeaders(res: express.Response, origin: string): void {
+  res.header("Access-Control-Allow-Origin", origin);
+}
+
+export { greeting, getPort, isOriginAllowed, setHeaders };
