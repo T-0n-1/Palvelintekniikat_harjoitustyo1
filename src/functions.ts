@@ -7,9 +7,9 @@ dotenv.config();
 
 // List of whitelisted origins
 const whitelist: string[] = [
-  `https://${process.env.SERVERNAME}:${process.env.PORT}`,
-  `https://${process.env.SERVERNAME}:${process.env.BROWSERSYNCPORT}`,
-  `https://${process.env.SERVERNAME}:${process.env.SERVERPORT}`,
+  `http://${process.env.SERVERNAME}:${process.env.PORT}`,
+  `http://${process.env.SERVERNAME}:${process.env.BROWSERSYNCPORT}`,
+  `http://${process.env.SERVERNAME}:${process.env.SERVERPORT}`,
   "https://tonimertanen.fi",
   "https://www.google.com:3000",
 ];
