@@ -11,7 +11,6 @@ const whitelist: string[] = [
   `http://${process.env.SERVERNAME}:${process.env.BROWSERSYNCPORT}`,
   `http://${process.env.SERVERNAME}:${process.env.SERVERPORT}`,
   "https://tonimertanen.fi",
-  "https://www.google.com:3000",
 ];
 
 // Greeting function
